@@ -27,6 +27,12 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	FName ThrowObjectInput;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	FName IncreaseRaycast;
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	FName DecreaseRaycast;
+
 protected:
 	class AMyCharacter* MyCharacter = nullptr;
 	class UGravityGunComponent* GravityGunComponent = nullptr;
@@ -37,6 +43,9 @@ public:
 protected:
 	void OnTakeObjectInputPressed();
 	void OnThrowObjectInputPressed();
+	void OnThrowObjectInputReleased();
+	void increaseRaycast();
+	void decreaseRaycast();
 
 		
 };

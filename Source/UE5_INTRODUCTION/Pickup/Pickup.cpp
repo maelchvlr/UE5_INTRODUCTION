@@ -25,3 +25,29 @@ void APickup::Tick(float DeltaTime)
 
 }
 
+void APickup::StartPickupDetonationTimer()
+{
+	float DestructionTime = PickupStruct.DestructionTimer;
+
+	//Prepare Timer
+	FTimerManager& TimerManager = this->GetWorldTimerManager();
+	TimerManager.ClearTimer(ProjectileDestructionTimerHandle);
+	TimerManager.SetTimer(ProjectileDestructionTimerHandle, this, &APickup::DestroyPickup, DestructionTime, false);
+}
+
+void APickup::DestroyPickup()
+{
+	//Clear timer
+	ClearTimer();
+
+	OnPickupDestroyDelegate.Broadcast();
+
+	Destroy();
+}
+
+void APickup::ClearTimer()
+{
+	FTimerManager& TimerManager = this->GetWorldTimerManager();
+	TimerManager.ClearTimer(ProjectileDestructionTimerHandle);
+}
+

@@ -33,6 +33,9 @@ void UGravityGunController::setupInputComponentGravityGun(AMyCharacter* InCharac
 	//bind action
 	InputComponent->BindAction(TakeObjectInput, IE_Pressed, this, &UGravityGunController::OnTakeObjectInputPressed);
 	InputComponent->BindAction(ThrowObjectInput, IE_Pressed, this, &UGravityGunController::OnThrowObjectInputPressed);
+	InputComponent->BindAction(ThrowObjectInput, IE_Released, this, &UGravityGunController::OnThrowObjectInputReleased);
+	InputComponent->BindAction(IncreaseRaycast, IE_Pressed, this, &UGravityGunController::increaseRaycast);
+	InputComponent->BindAction(DecreaseRaycast, IE_Pressed, this, &UGravityGunController::decreaseRaycast);
 }
 
 void UGravityGunController::OnTakeObjectInputPressed()
@@ -48,6 +51,30 @@ void UGravityGunController::OnThrowObjectInputPressed()
 	if (GravityGunComponent)
 	{
 		GravityGunComponent->onThrowObjectInputPressed();
+	}
+}
+
+void UGravityGunController::OnThrowObjectInputReleased()
+{
+	if (GravityGunComponent)
+		{
+			GravityGunComponent->onThrowObjectInputReleased();
+		}
+}
+
+void UGravityGunController::increaseRaycast()
+{
+	if (GravityGunComponent)
+	{
+		GravityGunComponent->increaseRaycast();
+	}
+}
+
+void UGravityGunController::decreaseRaycast()
+{
+	if (GravityGunComponent)
+	{
+		GravityGunComponent->decreaseRaycast();
 	}
 }
 

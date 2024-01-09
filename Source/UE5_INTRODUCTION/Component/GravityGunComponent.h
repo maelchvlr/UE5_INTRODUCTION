@@ -26,6 +26,9 @@ public:
 
 	void onTakeObjectInputPressed();
 	void onThrowObjectInputPressed();
+	void onThrowObjectInputReleased();
+	void increaseRaycast();
+	void decreaseRaycast();
 	void SetCharacter(class AMyCharacter* InCharacter) { MyCharacter = InCharacter; }
 
 // Collision
@@ -35,10 +38,58 @@ public:
     UPROPERTY(EditAnywhere, Category = "GravityGun | Collision", meta = (ClampMin = "0.0", ClampMax="3000.0"))
 	float RaycastSize = 500.0f;
 
+	UPROPERTY(EditAnywhere, Category = "GravityGun | Collision")
+	float RaycastSizeMax = 3000.0f;
+
+	UPROPERTY(EditAnywhere, Category = "GravityGun | Collision")
+	float RaycastSizeIncrease = 200.f;
+
 	class AMyCharacter* MyCharacter = nullptr;
 
 	TWeakObjectPtr<class APlayerCameraManager> PlayerCameraManager = nullptr;
 
 	ECollisionChannel GravityGunCollisionChannel;
+
+	//Pick up
+protected:
+	float RaycastIncrease;
+	float throwStart;
+	float timeHeld;
+	class APickup* CurrentPickUp = nullptr;
+	UStaticMeshComponent* PickUpCube = nullptr;
+	FName PreviousCollisionProfile = NAME_None;
+
+	UPROPERTY(EditAnywhere, Category = "GravityGun | Pickup")
+	float DistanceFromPlayer = 300.0f;
+
+	UPROPERTY(EditAnywhere, Category = "GravityGun | Pickup")
+	float PickUpThrowForce = 2000.0f;
+
+	UPROPERTY(EditAnywhere, Category = "GravityGun | Pickup")
+	FVector PickUpAngularForce = FVector(2000.0f);
+
+	UPROPERTY(EditAnywhere, Category = "GravityGun | Pickup")
+	float MaxTimeHeld = 2.0;
+
+	UPROPERTY(EditAnywhere, Category = "GravityGun | Pickup")
+	float MinTimeHeld = 1.0;
+
+	//Debug
+protected:
+	UPROPERTY(EditAnywhere, Category = "GravityGun | Debug")
+	bool bDrawDebugRaycast = false;
+	UPROPERTY(EditAnywhere, Category = "GravityGun | Debug", meta = (ClampMin = "0.1", ClampMax = "30.0"))
+	float TimeDebugRaycast = 5.f;
+
+protected:
+	void UpdatePickupLocation();
+	void ReleasePickUp(bool bThrow = false);
+
+	// Event on pickup destroy
+protected:
+	UFUNCTION()
+	void OnHoldPickupDestroyed();
+
+
 		
 };
