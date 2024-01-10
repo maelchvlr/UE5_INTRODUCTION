@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "GravityGunComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPickupTakenDelegate, FString, PickupName);
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UE5_INTRODUCTION_API UGravityGunComponent : public UActorComponent
@@ -90,6 +91,9 @@ protected:
 	UFUNCTION()
 	void OnHoldPickupDestroyed();
 
-
+	//Exemple of delegate
+public:
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FPickupTakenDelegate OnPickupTake;
 		
 };

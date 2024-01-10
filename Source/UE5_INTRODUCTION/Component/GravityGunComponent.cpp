@@ -78,12 +78,13 @@ void UGravityGunComponent::onTakeObjectInputPressed()
 	if (!PickUpCube)
 		return;
 
+	// Disable physics
+	PickUpCube->SetSimulatePhysics(false);
+
 	//Update Collision Profile
 	PreviousCollisionProfile = PickUpCube->GetCollisionProfileName();
 	PickUpCube->SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
 
-	// Disable physics
-	PickUpCube->SetSimulatePhysics(false);
 
 	if (CurrentPickUp->GetPickupType() != EPickupType::Normal)
 	{
@@ -98,6 +99,7 @@ void UGravityGunComponent::onTakeObjectInputPressed()
 	}
 
 	UE_LOG(LogTemp, Log, TEXT("Hit %s"), *CurrentPickUp->GetName());
+	OnPickupTake.Broadcast(CurrentPickUp->GetName());
 }
 
 void UGravityGunComponent::onThrowObjectInputPressed()

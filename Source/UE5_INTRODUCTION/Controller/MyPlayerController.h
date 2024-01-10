@@ -32,13 +32,23 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Inputs | Mouse")
 	FName LookRightInput;
-	
+
+	UPROPERTY(EditAnywhere, Category = "Inputs | Score")
+	FName CountScoreInput;
 
 protected:
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 	void SetupCameraComponent();
 	void Jump();
+
+	//Score
+protected:
+	void CountScore();
+
+protected:
+	TArray<AActor*> Goals;
+
 
 public:
 	virtual void SetupInputComponent() override;
