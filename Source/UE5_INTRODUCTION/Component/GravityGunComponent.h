@@ -28,9 +28,12 @@ public:
 	void onTakeObjectInputPressed();
 	void onThrowObjectInputPressed();
 	void onThrowObjectInputReleased();
+	void onDelete();
 	void increaseRaycast();
 	void decreaseRaycast();
 	void SetCharacter(class AMyCharacter* InCharacter) { MyCharacter = InCharacter; }
+	bool isHandEmpty() { return CurrentPickUp == nullptr; }
+	void setHand(class APickup* pickup);
 
 // Collision
 	UPROPERTY(EditAnywhere, Category = "GravityGun | Collision")
@@ -89,11 +92,38 @@ protected:
 	// Event on pickup destroy
 protected:
 	UFUNCTION()
-	void OnHoldPickupDestroyed();
+	void OnHoldPickupDestroyed(class APickup* pickup);
 
 	//Exemple of delegate
 public:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FPickupTakenDelegate OnPickupTake;
+
+	//Curve
+protected:
+	UPROPERTY(EditAnywhere, Category = "GravityGun | Curve")
+	class UCurveFloat* ThrowForceCurve = nullptr;
+
+	//DataAsset
+protected:
+	UPROPERTY(EditAnywhere, Category = "GravityGun | DataAsset")
+	class UThrowForceDataAsset* ThrowForceDataAsset = nullptr;
+
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "GravityGun")
+	float GetTimeToReachMaxThrowForce();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "GravityGun")
+	float GetTimeHeld();
+
+public:
+	void updateTimeHold();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "GravityGun")
+	float getCurrentTimeHold() { return currentTimeHold; }
+
+protected:
+	float currentTimeHold = 0.f;
+	bool startHolding = false;
 		
 };

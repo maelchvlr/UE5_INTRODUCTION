@@ -34,8 +34,26 @@ void UGravityGunController::setupInputComponentGravityGun(AMyCharacter* InCharac
 	InputComponent->BindAction(TakeObjectInput, IE_Pressed, this, &UGravityGunController::OnTakeObjectInputPressed);
 	InputComponent->BindAction(ThrowObjectInput, IE_Pressed, this, &UGravityGunController::OnThrowObjectInputPressed);
 	InputComponent->BindAction(ThrowObjectInput, IE_Released, this, &UGravityGunController::OnThrowObjectInputReleased);
+	InputComponent->BindAction(DeleteHandInput, IE_Pressed, this, &UGravityGunController::OnDelete);
 	InputComponent->BindAction(IncreaseRaycast, IE_Pressed, this, &UGravityGunController::increaseRaycast);
 	InputComponent->BindAction(DecreaseRaycast, IE_Pressed, this, &UGravityGunController::decreaseRaycast);
+}
+
+bool UGravityGunController::isHandEmpty()
+{
+	if (GravityGunComponent)
+	{
+		return GravityGunComponent->isHandEmpty();
+	}
+	return false;
+}
+
+void UGravityGunController::setHand(APickup* pickup)
+{
+	if (GravityGunComponent)
+	{
+		GravityGunComponent->setHand(pickup);
+	}
 }
 
 void UGravityGunController::OnTakeObjectInputPressed()
@@ -60,6 +78,14 @@ void UGravityGunController::OnThrowObjectInputReleased()
 		{
 			GravityGunComponent->onThrowObjectInputReleased();
 		}
+}
+
+void UGravityGunController::OnDelete()
+{
+	if (GravityGunComponent)
+	{
+		GravityGunComponent->onDelete();
+	}
 }
 
 void UGravityGunController::increaseRaycast()

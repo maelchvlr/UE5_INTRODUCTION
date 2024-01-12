@@ -28,6 +28,9 @@ protected:
 	FName ThrowObjectInput;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
+	FName DeleteHandInput;
+
+	UPROPERTY(EditAnywhere, Category = "Input")
 	FName IncreaseRaycast;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
@@ -39,11 +42,14 @@ protected:
 
 public:
 	void setupInputComponentGravityGun(class AMyCharacter* InCharacter, TObjectPtr<class UInputComponent> InputComponent);
+	bool isHandEmpty();
+	void setHand(class APickup* pickup);
 
 protected:
 	void OnTakeObjectInputPressed();
 	void OnThrowObjectInputPressed();
 	void OnThrowObjectInputReleased();
+	void OnDelete();
 	void increaseRaycast();
 	void decreaseRaycast();
 

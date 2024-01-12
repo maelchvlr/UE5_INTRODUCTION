@@ -36,6 +36,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Inputs | Score")
 	FName CountScoreInput;
 
+	//Pause
+	UPROPERTY(EditAnywhere, Category = "Inputs | Pause")
+	FName PauseInputName = FName();
+
 protected:
 	void MoveForward(float Value);
 	void MoveRight(float Value);
@@ -74,7 +78,33 @@ protected:
 protected:
 	class UGravityGunController* GravityGunController = nullptr;
 
+//Pickup Spawner
+protected:
+	class UPickupSpawnerController* PickupSpawnerController = nullptr;
+
+public:
+	UFUNCTION()
+	void OnPickupSpawn(class APickup* pickup);
+
 public:
 	virtual void BeginPlay() override;
 	void LateBeginPlay();
+
+
+	//Pause
+protected:
+	UPROPERTY(EditAnywhere, Category = "Pause")
+	TSubclassOf<class UPauseMenuUserWidget> PauseMenuWidget = nullptr;
+
+
+protected:
+	void OnPauseInputPressed();
+
+	//Sensitivity update from menu
+public:
+	float GetXSensitivity();
+	float GetYSensitivity();
+
+	void SetXSensitivity(float Value);
+	void SetYSensitivity(float Value);
 };

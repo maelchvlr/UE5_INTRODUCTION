@@ -27,7 +27,7 @@ public:
 	float DestructionTimer = 5.0f;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPickupDestroyDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPickupDestroyDelegate, APickup*, pickup);
 
 UCLASS(Blueprintable, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class UE5_INTRODUCTION_API APickup : public AActor

@@ -39,9 +39,7 @@ void APickup::DestroyPickup()
 {
 	//Clear timer
 	ClearTimer();
-
-	OnPickupDestroyDelegate.Broadcast();
-
+	OnPickupDestroyDelegate.Broadcast(this);
 	Destroy();
 }
 

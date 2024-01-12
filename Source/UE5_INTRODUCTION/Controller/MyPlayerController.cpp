@@ -4,6 +4,10 @@
 #include "Controller/MyPlayerController.h"
 #include "Character/MyCharacter.h"
 #include "Component/GravityGunController.h"
+#include "PickupSpawner/PickupSpawnerController.h"
+#include "PickupSpawner/PickupSpawner.h"
+#include "Pickup/Pickup.h"
+#include "HUD/PauseMenuUserWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "Goal/Goal.h"
 
@@ -75,6 +79,9 @@ void AMyPlayerController::SetupInputComponent()
 	InputComponent->BindAxis(MoveRightInput, this, &AMyPlayerController::MoveRight);
 
 	InputComponent->BindAction(JumpInput, IE_Pressed, this, &AMyPlayerController::Jump);
+	
+	// Bind Pause
+	InputComponent->BindAction(PauseInputName, IE_Pressed, this, &AMyPlayerController::OnPauseInputPressed);
 
 	// Bind Score
 	FInputActionBinding ScoreInputActionBinding = InputComponent->BindAction(CountScoreInput, IE_Pressed, this, &AMyPlayerController::CountScore);
@@ -108,6 +115,20 @@ void AMyPlayerController::AddYawInput(float Value)
 	Super::AddYawInput(Multiplier);
 }
 
+void AMyPlayerController::OnPickupSpawn(APickup* pickup)
+{
+	UE_LOG(LogTemp, Warning, TEXT("OnPickupSpawn"));
+	if (IsValid(GravityGunController))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GravityGunController Found"));
+		if (GravityGunController->isHandEmpty())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Hand is Empty"));
+			GravityGunController->setHand(pickup);
+		}
+	}
+}
+
 void AMyPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -121,6 +142,8 @@ void AMyPlayerController::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("No Goals Found"));
 	}	
 
+	
+
 }
 
 void AMyPlayerController::LateBeginPlay()
@@ -130,4 +153,50 @@ void AMyPlayerController::LateBeginPlay()
 	{
 		GravityGunController->setupInputComponentGravityGun(MyCharacter, InputComponent);
 	}
+
+	PickupSpawnerController = GetComponentByClass<UPickupSpawnerController>();
+	if (IsValid(PickupSpawnerController))
+	{
+		PickupSpawnerController->setupInputComponentPickupSpawner(MyCharacter, InputComponent);
+	}
+
+	auto PickupSpawner = PickupSpawnerController->GetPickupSpawner();
+	if (PickupSpawner)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("PickupSpawner Found"));
+	}
+	PickupSpawner->OnPickupSpawn.AddDynamic(this, &AMyPlayerController::OnPickupSpawn);
+}
+
+void AMyPlayerController::OnPauseInputPressed()
+{
+	if (PauseMenuWidget)
+	{
+		//Create Widget
+		UPauseMenuUserWidget* PauseMenu = Cast<UPauseMenuUserWidget>(CreateWidget<UPauseMenuUserWidget>(this, PauseMenuWidget));
+		if (PauseMenu)
+		{
+			PauseMenu->AddToViewport(0);
+		}
+	}
+}
+
+float AMyPlayerController::GetXSensitivity()
+{
+	return MouseSensitivityX;
+}
+
+float AMyPlayerController::GetYSensitivity()
+{
+	return MouseSensitivityY;
+}
+
+void AMyPlayerController::SetXSensitivity(float Value)
+{
+	MouseSensitivityX = Value;
+}
+
+void AMyPlayerController::SetYSensitivity(float Value)
+{
+	MouseSensitivityY = Value;
 }
